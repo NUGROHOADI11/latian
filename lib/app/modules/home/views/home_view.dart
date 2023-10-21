@@ -42,8 +42,8 @@ class HomeView extends GetView<HomeController> {
                   itemCount: 5,
                   itemBuilder: (context, index) => ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: Colors.grey,
                       backgroundImage: NetworkImage(allUser[index]['avatar']),
+                      backgroundColor: Colors.grey,
                     ),
                     title: Text(
                         "${allUser[index]['first_name']} ${allUser[index]['last_name']}"),
