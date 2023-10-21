@@ -9,8 +9,8 @@ import 'package:http/http.dart';
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
 
-  List<UserModel> allUser = [];
-
+  final List<UserModel> allUser = [];
+  
   Future getAllUser() async {
     try {
       var response = await get(Uri.parse("https://reqres.in/api/users?page=1"));
@@ -35,12 +35,12 @@ class HomeView extends GetView<HomeController> {
             future: getAllUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: Text("Loading ...."),
                 );
               } else {
-                if (allUser.length == 0) {
-                  return Center(
+                if (allUser.isEmpty) {
+                  return const Center(
                     child: Text("Tidak ada data"),
                   );
                 }
@@ -53,7 +53,7 @@ class HomeView extends GetView<HomeController> {
                     ),
                     title: Text(
                         "${allUser[index].firstName} ${allUser[index].lastName}"),
-                    subtitle: Text("${allUser[index].email}"),
+                    subtitle: Text(allUser[index].email),
                   ),
                 );
               }
