@@ -5,33 +5,29 @@ UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
-  int id;
-  String email;
-  String firstName;
-  String lastName;
-  String avatar;
+    int userId;
+    int id;
+    String title;
+    bool completed;
 
-  UserModel({
-    required this.id,
-    required this.email,
-    required this.firstName,
-    required this.lastName,
-    required this.avatar,
-  });
+    UserModel({
+        required this.userId,
+        required this.id,
+        required this.title,
+        required this.completed,
+    });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+    factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
+        userId: json["userId"],
         id: json["id"],
-        email: json["email"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
-        avatar: json["avatar"],
-      );
+        title: json["title"],
+        completed: json["completed"],
+    );
 
-  Map<String, dynamic> toJson() => {
+    Map<String, dynamic> toJson() => {
+        "userId": userId,
         "id": id,
-        "email": email,
-        "first_name": firstName,
-        "last_name": lastName,
-        "avatar": avatar,
-      };
+        "title": title,
+        "completed": completed,
+    };
 }

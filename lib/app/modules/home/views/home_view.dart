@@ -4,59 +4,76 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:latian/app/modules/home/models/user.dart';
 import '../controllers/home_controller.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
 
   final List<UserModel> allUser = [];
-  
-  Future getAllUser() async {
+
+  // Future<void> getAllUser() async {
+  //   try {
+  //     final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/todos'));
+
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> data = json.decode(response.body);
+  //       data.forEach((element) {
+  //         allUser.add(UserModel.fromJson(element));
+  //       });
+  //     } else {
+  //       print("Failed to fetch data: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("An error occurred: $e");
+  //   }
+  // }
+
+  Future<void> getAllUser() async {
     try {
-      var response = await get(Uri.parse("https://reqres.in/api/users?page=1"));
-      List data = (json.decode(response.body) as Map<String, dynamic>)["data"];
-      data.forEach((element) {
-        allUser.add(UserModel.fromJson(element));
-      });
+      final response = await http
+          .get(Uri.parse('https://jsonplaceholder.typicode.com/todos/5'));
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        allUser.add(UserModel.fromJson(data));
+      } else {
+        print("Failed to fetch data: ${response.statusCode}");
+      }
     } catch (e) {
-      print("terjadi kesalahan");
-      print(e);
+      print("An error occurred: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('HomeView'),
-          centerTitle: true,
-        ),
-        body: FutureBuilder(
-            future: getAllUser(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: Text("Loading ...."),
-                );
-              } else {
-                if (allUser.isEmpty) {
-                  return const Center(
-                    child: Text("Tidak ada data"),
-                  );
-                }
-                return ListView.builder(
-                  itemCount: allUser.length,
-                  itemBuilder: (context, index) => ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.grey,
-                      backgroundImage: NetworkImage(allUser[index].avatar),
-                    ),
-                    title: Text(
-                        "${allUser[index].firstName} ${allUser[index].lastName}"),
-                    subtitle: Text(allUser[index].email),
-                  ),
-                );
-              }
-            }));
+      appBar: AppBar(
+        title: const Text('HomeView'),
+        centerTitle: true,
+      ),
+      body: FutureBuilder(
+        future: getAllUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: Text("Loading ...."),
+            );
+          } else {
+            if (allUser.isEmpty) {
+              return const Center(
+                child: Text("Tidak ada data"),
+              );
+            }
+            return ListView.builder(
+              itemCount: allUser.length,
+              itemBuilder: (context, index) => ListTile(
+                title: Text("${allUser[index].userId} ${allUser[index].id}"),
+                subtitle: Text(allUser[index].title),
+              ),
+            );
+          }
+        },
+      ),
+    );
   }
 }
