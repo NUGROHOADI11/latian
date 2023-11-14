@@ -2,7 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:latian/app/modules/home/models/user.dart';
+import 'package:latian/app/controllers/auth_controller.dart';
+import 'package:latian/app/data/models/user.dart';
 import '../controllers/home_controller.dart';
 import 'package:http/http.dart' as http;
 
@@ -46,10 +47,14 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final authControl = Get.find<AuthController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('HomeView'),
         centerTitle: true,
+        actions: [
+          IconButton(onPressed: () => authControl.logout(), icon: Icon(Icons.logout_outlined))
+        ],
       ),
       body: FutureBuilder(
         future: getAllUser(),
