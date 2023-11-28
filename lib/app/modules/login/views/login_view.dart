@@ -1,17 +1,13 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
+import 'package:latian/app/controllers/auth_appwrite.dart';
 import 'package:latian/app/controllers/auth_controller.dart';
 import 'package:latian/app/routes/app_pages.dart';
-
 import '../controllers/login_controller.dart';
-import 'package:get/get.dart';
 
 class LoginView extends GetView<LoginController> {
-  final emailControl = TextEditingController();
-  final passControl = TextEditingController();
+  final TextEditingController emailControl = TextEditingController();
+  final TextEditingController passControl = TextEditingController();
   final authControl = Get.find<AuthController>();
 
   @override
@@ -28,29 +24,46 @@ class LoginView extends GetView<LoginController> {
           children: [
             TextField(
               controller: emailControl,
-              decoration: InputDecoration(labelText: "Email"),
+              decoration: const InputDecoration(labelText: "Email"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             TextField(
               controller: passControl,
-              decoration: InputDecoration(labelText: "Password"),
+              decoration: const InputDecoration(labelText: "Password"),
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             ElevatedButton(
-              onPressed: () =>
-                  authControl.login(emailControl.text, passControl.text),
-              child: Text("Login"),
+              onPressed: () async {
+                try {
+                  await loginUser(
+                        emailControl.text, passControl.text)
+                      .then((value) {
+                    if (value == true) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Login Success")));
+                      // Get.offAllNamed(Routes.HOME);
+                    } else {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text(value)));
+                    }
+                  });
+                  await authControl.login(emailControl.text, passControl.text);
+                } catch (error) {
+                  print("Error during registration: $error");
+                }
+              },
+              child: const Text("Login"),
             ),
             Row(
               children: [
-                Text("Don't have any Account?"),
+                const Text("Don't have any Account?"),
                 TextButton(
                     onPressed: () => Get.toNamed(Routes.SIGNUP),
-                    child: Text("Sign Up"))
+                    child: const Text("Sign Up"))
               ],
             )
           ],

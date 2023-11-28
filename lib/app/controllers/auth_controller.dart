@@ -7,7 +7,7 @@ class AuthController extends GetxController {
 
   Stream<User?> get streamAuthStatus => auth.authStateChanges();
 
-  void login(String email, String pass) async {
+  Future login(String email, String pass) async {
     try {
       final credential = await auth.signInWithEmailAndPassword(
         email: email,
@@ -28,7 +28,7 @@ class AuthController extends GetxController {
     Get.offAllNamed(Routes.LOGIN);
   }
 
-  void signup(String email, String pass) async {
+  Future signup(String email, String pass) async {
     try {
       final credential = await auth.createUserWithEmailAndPassword(
         email: email,
