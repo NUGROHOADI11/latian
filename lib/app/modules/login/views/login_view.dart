@@ -45,7 +45,7 @@ class LoginView extends GetView<LoginController> {
                     if (value == true) {
                       ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text("Login Success")));
-                      // Get.offAllNamed(Routes.HOME);
+                      Get.offAllNamed(Routes.HOME);
                     } else {
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text(value)));
